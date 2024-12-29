@@ -17,7 +17,7 @@ export class StoryRepository implements IStoryRepository {
         this.db = dbClient;
     }
 
-    public async create(data: Story): Promise<IResult<{ id: string }>> {
+    public async create(data: CreationStory): Promise<IResult<{ id: string }>> {
         try {
             console.log(data);
             const story = await this.db.story.create({
@@ -34,7 +34,7 @@ export class StoryRepository implements IStoryRepository {
                         create: data.questions.map((question) => ({
                             text: question.text,
                             options: question.options,
-                            answer: question.options[question.correctAnswer], // Doğru cevabı kaydediyoruz
+                            answer: question.options[question.correctAnswer], 
                             correctAnswer: question.correctAnswer,
                         }))
                     }
@@ -197,6 +197,18 @@ type Story = {
     createdAt: Date;  // createdAt, string yerine Date tipinde olmalı
 }
 
+type CreationStory = {
+    userId: string;
+    interest: string;
+    level: string;
+    difficulty: string;
+    language: string;
+    length: number;
+    title: string;
+    content: string;
+    questions: Question[];
+    createdAt: Date;
+}
 
 type Stories = {
     id: string,

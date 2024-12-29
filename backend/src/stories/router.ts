@@ -6,7 +6,7 @@ interface IStoryHandler {
     getStories: (req: Request, res: Response) => Promise<IResponse<Stories>>;
     getStory: (req: Request, res: Response) => Promise<IResponse<any>>;
     delete: (req: Request, res: Response) => Promise<IResponse>;
-    create: (req: Request, res: Response) => Promise<IResponse>;
+    create: (req: Request, res: Response) => Promise<IResponse<{ id: string }>>;
     update: (req: Request, res: Response) => Promise<IResponse>;
 }
 

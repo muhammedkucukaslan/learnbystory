@@ -45,7 +45,7 @@ export class StoryService {
         }
     }
 
-    public async create(data: CreationStory): Promise<IResult<{ id: string }>> {
+    public async create(data: BodyStory): Promise<IResult<{ id: string }>> {
         try {
 
 
@@ -57,12 +57,14 @@ export class StoryService {
             }
 
             const createdStoryResult = await this.repository.create({
+ // Assign a proper id value here
                 userId: data.userId,
                 interest: data.interest,
                 level: data.level,
                 length: data.length,
                 language: data.language,
                 difficulty: data.difficulty,
+                createdAt: new Date(), // Assign the current date or a proper date value here
                 ...aiResult.data
             })
 
@@ -110,6 +112,7 @@ interface ResponsePrompt {
 }
 
 interface Question {
+    id: string;
     text: string;
     options: string[];
     correctAnswer: number;
@@ -147,17 +150,29 @@ type Stories = {
 
 type CreationStory = {
     userId: string;
-    interest: string;  // typo düzeltildi: insterests -> interests
+    interest: string;
     level: string;
     difficulty: string;
     language: string;
     length: number;
     title: string;
     content: string;
-    questions: CreationQuestion[];
+    questions: Question[];
+    createdAt: Date;
 }
 type CreationQuestion = {
     text: string;
     options: string[];
     correctAnswer: number;
+}
+
+
+type BodyStory = {
+    userId: string;
+    insterests: string[];
+    level: string;
+    difficulty: string;
+    interest: string;
+    language: string;
+    length: number;
 }

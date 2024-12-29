@@ -5,7 +5,7 @@ import { IResponse, IResult } from '../types/global';
 interface IUserService {
     getUser: (id: string) => Promise<IResult<User>>;
     deleteUser: (id: string) => Promise<IResult>;
-    updateUser: (id: string, data: Updation ) => Promise<IResult>;
+    updateUser: (id: string, data: Updation) => Promise<IResult>;
 }
 
 export class UserHandler {
@@ -92,11 +92,10 @@ type User = {
 };
 
 
-type Updation = { 
+type Updation = {
     language: {
         language: string;
         level: string;
     },
-    interest: string;
-    
+    interests: string[];
 }

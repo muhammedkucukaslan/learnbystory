@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { handleSuccessResponse, handleErrorResponse } from '../utils/functions';
 import { IResponse, IResult } from '../types/global';
 
+
 interface IStoryService {
     getStories: (userId: string) => Promise<IResult<Stories>>;
     getStory: (id: string) => Promise<IResult<Story>>;

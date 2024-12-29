@@ -1,13 +1,20 @@
 import { IResult } from '../types/global';
 import { createSuccessResult, createErrorResult } from '../utils/functions';
 
+
+interface IUserService {
+    getUser: (id: string) => Promise<IResult<User>>;
+    deleteUser: (id: string) => Promise<IResult>;
+    updateUser: (id: string, data: Updation ) => Promise<IResult>;
+}
+
 interface IUserRepository {
     getUser: (id: string) => Promise<IResult<User>>;
     delete: (id: string) => Promise<IResult>;
     updateUser: (id: string, data: Updation) => Promise<IResult>;
 }
 
-export class UserService {
+export class UserService implements IUserService {
     private repository: IUserRepository;
 
     constructor(repository: IUserRepository) {
