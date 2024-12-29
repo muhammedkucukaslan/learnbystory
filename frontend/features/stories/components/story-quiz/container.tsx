@@ -16,7 +16,7 @@ const StoryQuizContainer: React.FC<StoryQuizProps> = ({ story, questions }) => {
           <Story content={story.content} />
         </Card>
         <Card className="h-[600px]">
-          <Quiz questions={questions} />
+          <Quiz questions={questions} id={story.id} />
         </Card>
       </div>
     </div>

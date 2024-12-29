@@ -29,6 +29,7 @@ const formSchema = z.object({
   language: z.string(),
   length: z.string(),
   interest: z.string(),
+  difficulty: z.string(),
 });
 
 export default function GenerateForm() {
@@ -40,7 +41,18 @@ export default function GenerateForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    generateStory(values);
+    const foundLanguage = user.languages.find(
+      (language: any) => language.language === values.language
+    );
+    const data = {
+      language: foundLanguage.language,
+      length: Number(values.length),
+      interest: values.interest,
+      level: foundLanguage.level,
+      difficulty: values.difficulty,
+    };
+
+    generateStory(data);
   }
 
   if (isUserLoading) {
@@ -106,6 +118,32 @@ export default function GenerateForm() {
                 </SelectContent>
               </Select>
               <FormDescription>Select a length for the story</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="difficulty"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Difficulty</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select difficulty" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="easy">Easy</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="hard">Hard</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Select a difficulty for the story
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

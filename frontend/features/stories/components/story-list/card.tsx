@@ -17,7 +17,7 @@ type Props = {
 
 const StoryCard = ({ story }: Props) => {
   return (
-    <Link href={`/dashboard/stories/${story._id}`}>
+    <Link href={`/dashboard/stories/${story.id}`}>
       <Card className="h-full">
         <CardHeader className="flex flex-col items-center">
           <CardTitle className="text-2xl md:text-3xl text-center truncate max-w-full">

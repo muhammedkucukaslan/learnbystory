@@ -7,8 +7,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { Question } from "../../types";
+import { useUpdateStory } from "@/hooks/queries/story";
 
-const Quiz: React.FC<{ questions: Question[] }> = ({ questions }) => {
+const Quiz: React.FC<{ questions: Question[]; id: string }> = ({
+  questions,
+  id,
+}) => {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showResults, setShowResults] = useState(false);
 
@@ -25,6 +29,15 @@ const Quiz: React.FC<{ questions: Question[] }> = ({ questions }) => {
       if (answers[q.id] === q.correctAnswer) correct++;
     });
     return correct;
+  };
+
+  const { mutate: update, isPending } = useUpdateStory();
+
+  const handleSubmit = () => {
+    update({
+      id: id,
+      result: calculateScore(),
+    });
   };
 
   return (
@@ -66,7 +79,10 @@ const Quiz: React.FC<{ questions: Question[] }> = ({ questions }) => {
 
         <Button
           className="w-full"
-          onClick={() => setShowResults(true)}
+          onClick={() => {
+            setShowResults(true);
+            handleSubmit();
+          }}
           disabled={
             showResults || Object.keys(answers).length !== questions.length
           }
