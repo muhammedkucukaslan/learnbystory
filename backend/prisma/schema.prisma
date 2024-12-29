@@ -8,14 +8,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  email     String   @unique
+  email     String     @unique
   password  String
   languages Language[]
   interests String[]
   results   Result[]
-  createdAt DateTime @default(now())
+  createdAt DateTime   @default(now())
   Story     Story[]
 }
 
@@ -23,30 +23,29 @@ model Question {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   text          String
   answer        String
-  options       String[] 
-  correctAnswer Int      
+  options       String[]
+  correctAnswer Int
   storyId       String   @db.ObjectId
   story         Story    @relation(fields: [storyId], references: [id])
   createdAt     DateTime @default(now())
 }
 
 model Story {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  title        String
-  content      String
-  level        String
-  interests    String[]
-  language     String
-  length       Int
-  difficulty   String
-  userId       String     @db.ObjectId
-  user         User       @relation(fields: [userId], references: [id])
-  result       Result?
-  createdAt    DateTime   @default(now())
-  resultId     String?    @db.ObjectId
-  Question     Question[]
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  content    String
+  level      String
+  interest   String
+  language   String
+  length     Int
+  difficulty String
+  userId     String     @db.ObjectId
+  user       User       @relation(fields: [userId], references: [id])
+  result     Result?
+  createdAt  DateTime   @default(now())
+  resultId   String?    @db.ObjectId
+  Question   Question[]
 }
-
 
 model Result {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId

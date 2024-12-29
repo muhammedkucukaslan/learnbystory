@@ -143,9 +143,9 @@ function giveTokenSize(wordCount: number): number {
     return estimatedTokens;
 }
 
-function generatePrompt(language: string, level: string, interestAreas: string[], length: number): string {
+function generatePrompt(language: string, level: string, interest: string, length: number): string {
     const prompt = `
-Create an educational story and quiz in ${language} for language learners. The story should be engaging, appropriate for ${level} level learners, and involve themes about ${interestAreas.join(", ")}. The story should be approximately ${length} words long.
+Create an educational story and quiz in ${language} for language learners. The story should be engaging, appropriate for ${level} level learners, and involve themes about ${interest}. The story should be approximately ${length} words long.
 
 Please return a JSON object with the following exact structure:
 
@@ -178,8 +178,7 @@ Requirements:
 6. The story and questions should be in ${language}
 7. Include vocabulary and grammar patterns appropriate for ${level} level
 8. Questions should test both comprehension and language points
-9. Story should incorporate the themes: ${interestAreas.join(", ")}
-10. Story length should be approximately ${length} words
+9. Story length should be approximately ${length} words
 
 Return only the JSON object with no additional explanation or text.`;
 

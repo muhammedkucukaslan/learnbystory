@@ -97,6 +97,6 @@ type Updation = {
         language: string;
         level: string;
     },
-    interests: string[];
+    interest: string;
     
 }

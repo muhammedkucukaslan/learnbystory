@@ -2,7 +2,13 @@ import { IResult } from '../types/global';
 import { createSuccessResult, createErrorResult } from '../utils/functions';
 import prisma from '../config/db';
 
-export class UserRepository {
+interface IUserRepository {
+    getUser: (id: string) => Promise<IResult<User>>;
+    delete: (id: string) => Promise<IResult>;
+    updateUser: (id: string, data: Updation) => Promise<IResult>;
+}
+
+export class UserRepository implements IUserRepository{
     private db: typeof prisma;
 
     constructor(dbClient: typeof prisma) {
@@ -60,11 +66,11 @@ export class UserRepository {
         }
     }
 
-    public async updateUser(id: string, username: string): Promise<IResult> {
+    public async updateUser(id: string, data: Updation): Promise<IResult> {
         try {
             const result = await this.db.user.update({
                 where: { id },
-                data: { name: username }
+                data
             });
             if (!result) {
                 return createErrorResult('Error updating user', 'SERVER_ERROR');
@@ -88,4 +94,12 @@ type User = {
 type Language = {
     language: String
     level: String
+}
+
+type Updation = { 
+    language: {
+        language: string;
+        level: string;
+    },
+    interests: string[];
 }

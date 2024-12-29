@@ -21,7 +21,7 @@ export class StoryRepository implements IStoryRepository {
             await this.db.story.create({
                 data: {
                     userId: data.userId,
-                    interests: data.interests,
+                    interest: data.interest,
                     level: data.level,
                     language: data.language,
                     difficulty: data.difficulty,
@@ -79,7 +79,7 @@ export class StoryRepository implements IStoryRepository {
                 select: {
                     id: true,
                     title: true,
-                    interests: true,  // interests string[] olacak
+                    interest: true,
                     language: true,
                     length: true,
                     level: true,
@@ -118,7 +118,7 @@ export class StoryRepository implements IStoryRepository {
                     userId: true,
                     title: true,
                     content: true,
-                    interests: true,
+                    interest: true,
                     language: true,
                     length: true,
                     level: true,
@@ -142,7 +142,7 @@ export class StoryRepository implements IStoryRepository {
             // 'Question' alanını 'questions' olarak yeniden adlandırıyoruz
             const formattedStory = {
                 ...story,
-                questions: story.Question,  // 'Question' -> 'questions'
+                questions: story.Question ,  // 'Question' -> 'questions'
                 createdAt: story.createdAt  // Date tipini olduğu gibi kullanıyoruz
             };
 
@@ -169,7 +169,7 @@ interface Question {
 type Story = {
     id: string;
     userId: string;
-    interests: string[];  // typo düzeltildi: insterests -> interests
+    interest: string; 
     level: string;
     difficulty: string;
     language: string;
@@ -184,7 +184,7 @@ type Story = {
 type Stories = {
     id: string,
     title: string,
-    interests: string[], // Burada string[] olarak düzenlendi
+    interest: string, 
     language: string,
     level: string,
     length: number,
