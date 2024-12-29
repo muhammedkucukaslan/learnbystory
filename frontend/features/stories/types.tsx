@@ -2,8 +2,10 @@ export type Story = {
   id: string;
   title: string;
   content: string;
-  field: string;
+  interest: string;
   result: string;
+  level: string;
+  difficulty: string;
   createdAt: Date;
 };
 

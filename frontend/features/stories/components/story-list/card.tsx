@@ -23,13 +23,15 @@ const StoryCard = ({ story }: Props) => {
           <CardTitle className="text-2xl md:text-3xl text-center truncate max-w-full">
             {story.title}
           </CardTitle>
-          <p className="text-sm">{story.field}</p>
+          <p className="text-sm">{story.interest}</p>
           <CardDescription className="text-muted-foreground text-md">
             {moment(story.createdAt).format("MMM Do YY")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col items-center">
-          {story.result && <Badge>{story.result}</Badge>}
+        <CardContent className="flex gap-1 items-center justify-center">
+          {story.result && <Badge>Quiz result: {story.result}</Badge>}
+          <Badge>{story.level}</Badge>
+          <Badge>{story.difficulty}</Badge>
         </CardContent>
       </Card>
     </Link>

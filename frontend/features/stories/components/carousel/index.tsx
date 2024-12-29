@@ -46,10 +46,10 @@ const StoryShowcase = () => {
   }
 
   const getBasisClass = (totalStories: number) => {
-    if (totalStories > 3) return "basis-1/3";
-    if (totalStories === 3) return "basis-1/3";
-    if (totalStories === 2) return "basis-1/2";
-    return "basis-full";
+    if (totalStories > 3) return "lg:basis-1/3";
+    if (totalStories === 3) return "lg:basis-1/3";
+    if (totalStories === 2) return "md:basis-1/2";
+    return "basis-1";
   };
 
   return (
@@ -67,7 +67,7 @@ const StoryShowcase = () => {
       <CarouselContent>
         {stories.map((story: any) => (
           <CarouselItem
-            key={story._id}
+            key={story.id}
             className={cn(
               getBasisClass(stories.length),
               "md:basis-1/2 lg:" + getBasisClass(stories.length)

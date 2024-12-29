@@ -1,5 +1,6 @@
 import { useMutationData } from "@/hooks/use-mutation-data";
 import { stories } from "@/lib/api/story";
+import { useModal } from "@/providers/modal-provider";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
@@ -19,13 +20,17 @@ export const useQueryStory = (id: string) => {
 
 export const useGenerateStory = () => {
   const router = useRouter();
+  const { setClose } = useModal();
 
   return useMutationData(
     ["stories"],
     stories.generateStory,
     "stories",
     // @ts-ignore
-    (data) => router.push(`/stories/${data.id}`)
+    (data) => {
+      router.push(`/dashboard/stories/${data.id}`);
+      setClose();
+    }
   );
 };
 

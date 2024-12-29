@@ -11,14 +11,14 @@ export const useMutationData = (
   mutationKey: MutationKey,
   mutationFn: MutationFunction<any, any>,
   queryKey?: string,
-  onSuccess?: () => void
+  onSuccess?: (data: any) => void
 ) => {
   const client = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationKey,
     mutationFn,
     onSuccess: (data) => {
-      if (onSuccess) onSuccess();
+      if (onSuccess) onSuccess(data);
     },
     onSettled: async () => {
       await client.invalidateQueries({ queryKey: [queryKey] });
