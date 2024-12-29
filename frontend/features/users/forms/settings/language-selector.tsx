@@ -50,7 +50,7 @@ const LanguageSelector: React.FC<{
           {availableLanguages
             .filter((lang) => !selectedLanguages.includes(lang.id))
             .map((language) => (
-              <SelectItem key={language.id} value={language.id}>
+              <SelectItem key={language.id} value={language.name}>
                 {language.name}
               </SelectItem>
             ))}
@@ -59,23 +59,23 @@ const LanguageSelector: React.FC<{
 
       <ScrollArea className="h-[300px]">
         <div className="space-y-4">
-          {selectedLanguages.map((languageId) => {
+          {selectedLanguages.map((languageName) => {
             const language = availableLanguages.find(
-              (l) => l.id === languageId
+              (l) => l.name === languageName
             );
             if (!language) return null;
 
             return (
               <div
-                key={languageId}
+                key={languageName}
                 className="flex items-center justify-between gap-4 p-2 border rounded-lg"
               >
                 <div className="flex items-center gap-4 px-3">
                   <span className="font-medium">{language.name}</span>
                   <Select
-                    value={proficiency[languageId]}
+                    value={proficiency[languageName]}
                     onValueChange={(level) =>
-                      onProficiencyChange(languageId, level)
+                      onProficiencyChange(languageName, level)
                     }
                   >
                     <SelectTrigger className="w-40">
@@ -93,7 +93,7 @@ const LanguageSelector: React.FC<{
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleLanguageRemove(languageId)}
+                  onClick={() => handleLanguageRemove(languageName)}
                 >
                   Remove
                 </Button>

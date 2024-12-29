@@ -20,11 +20,12 @@ const UserSettingsContainer: React.FC = () => {
   const { mutate: update, isPending } = useUpdateUser();
 
   const handleSave = () => {
+    const languages = settings.learningLanguages.map((language) => ({
+      language,
+      level: settings.proficiency[language] || "beginner", // varsayılan değer
+    }));
     const data = {
-      language: {
-        language: settings.learningLanguages[0],
-        level: settings.proficiency[settings.learningLanguages[0]],
-      },
+      languages: languages,
       interests: settings.interests,
     };
 

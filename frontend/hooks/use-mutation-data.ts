@@ -19,9 +19,6 @@ export const useMutationData = (
     mutationFn,
     onSuccess: (data) => {
       if (onSuccess) onSuccess();
-      return toast(data?.status === 200 ? "Success" : "Error", {
-        description: data.data,
-      });
     },
     onSettled: async () => {
       await client.invalidateQueries({ queryKey: [queryKey] });
