@@ -79,6 +79,7 @@ export class AuthHandler implements IAuthHandler {
             res.clearCookie('token');
             return handleSuccessResponse(res, null);
         } catch (error) {
+            console.error('LOGOUT HANDLER ERROR', error);
             return handleErrorResponse(
                 res,
                 'SERVER_ERROR',

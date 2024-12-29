@@ -5,7 +5,7 @@ import { IResponse, IResult } from '../types/global';
 interface IStoryService {
     getStories: (userId: string) => Promise<IResult<Stories>>;
     getStory: (id: string) => Promise<IResult<Story>>;
-    create: (data : CreationStory) => Promise<IResult<Story>>;
+    create: (data: CreationStory) => Promise<IResult>;
     delete: (id: string) => Promise<IResult>;
 }
 
@@ -87,8 +87,8 @@ export class StoryHandler {
     public async create(req: Request, res: Response): Promise<IResponse> {
         try {
             const id: string = req.headers['x-user-id'] as string;
-            const { data } = req.body;
-            const result = await this.service.create({userId: id, ...data});
+            const data = req.body
+            const result = await this.service.create({ userId: id, ...data });
             if (!result.success) {
                 return handleErrorResponse(
                     res,
@@ -108,33 +108,49 @@ export class StoryHandler {
     }
 }
 
-type Story = {
+
+interface Question {
     id: string;
-    title: string;
-    content: string;
-    created_at: string;
-    questions:
-    {
-        id: string;
-        question: string;
-        answer: string;
-    }[];
+    text: string;
+    options: string[];
+    correctAnswer: number;
 }
 
+
+type Story = {
+    id: string;
+    userId: string;
+    interests: string[];  // typo düzeltildi: insterests -> interests
+    level: string;
+    difficulty: string;
+    language: string;
+    length: number;
+    title: string;
+    content: string;
+    questions: Question[];  // Question yerine questions olmalı
+    createdAt: Date;  // createdAt, string yerine Date tipinde olmalı
+}
 
 type Stories = {
     id: string,
     title: string,
-    field: string,
-    result: number,
-    createdAt: string
+    interests: string[], // Burada string[] olarak düzenlendi
+    language: string,
+    level: string,
+    length: number,
+    difficulty: string,
+    result: number | null, // Burada score null olabileceği için number | null yaptık
+    createdAt: Date
 }[]
 
 
+
 type CreationStory = {
-    userId : string;
-    interest: string;
+    userId: string;
+    insterests: string[];
     level: string;
+    difficulty: string;
+    interests: string[];
     language: string;
     length: number;
 }
