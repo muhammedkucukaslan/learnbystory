@@ -47,8 +47,14 @@ export class AuthRepository {
                         create: [
                             {
                                 language: "English",
-                                level: "A1"
-                            }
+                                level: "C1"
+                            },
+                            {
+                                language: "Spanish",
+                                level: "A2"
+                            },
+                            { language: "Russian", level: "B1" },
+                            {language: "Arabic", level: "A1" }
                         ]
                     }
                 }

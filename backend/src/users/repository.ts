@@ -8,7 +8,7 @@ interface IUserRepository {
     updateUser: (id: string, data: Updation) => Promise<IResult>;
 }
 
-export class UserRepository implements IUserRepository{
+export class UserRepository implements IUserRepository {
     private db: typeof prisma;
 
     constructor(dbClient: typeof prisma) {
@@ -70,9 +70,13 @@ export class UserRepository implements IUserRepository{
         try {
             const result = await this.db.user.update({
                 where: { id },
-                data : {
+                data: {
                     languages: {
-                        create: data.languages
+                        deleteMany: {},
+                        create: data.languages.map(lang => ({
+                            language: lang.language,
+                            level: lang.level
+                        }))
                     },
                     interests: {
                         set: data.interests
@@ -105,7 +109,7 @@ type Language = {
     level: String
 }
 
-type Updation = { 
+type Updation = {
     languages: {
         language: string;
         level: string;
