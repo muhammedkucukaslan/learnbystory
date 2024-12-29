@@ -50,7 +50,7 @@ export class StoryService {
         try {
 
 
-            const prompt = generatePrompt(data.language, data.level, data.interests, data.length);
+            const prompt = generatePrompt(data.language, data.level, data.interest, data.length);
 
             const aiResult = await askGPT(prompt) as IResult<ResponsePrompt>;
             if (!aiResult.success) {
@@ -59,7 +59,7 @@ export class StoryService {
 
             const createdStoryResult = await this.repository.create({
                 userId: data.userId,
-                interests: data.interests,
+                interest: data.interest,
                 level: data.level,
                 length: data.length,
                 language: data.language,
@@ -108,7 +108,7 @@ interface Question {
 type Story = {
     id: string;
     userId: string;
-    interests: string[];  // typo düzeltildi: insterests -> interests
+    interest: string;  // typo düzeltildi: insterests -> interests
     level: string;
     difficulty: string;
     language: string;
@@ -123,7 +123,7 @@ type Story = {
 type Stories = {
     id: string,
     title: string,
-    interests: string[], // Burada string[] olarak düzenlendi
+    interest: string, // Burada string[] olarak düzenlendi
     language: string,
     level: string,
     length: number,
@@ -136,7 +136,7 @@ type Stories = {
 
 type CreationStory = {
     userId: string;
-    interests: string[];  // typo düzeltildi: insterests -> interests
+    interest: string;  // typo düzeltildi: insterests -> interests
     level: string;
     difficulty: string;
     language: string;

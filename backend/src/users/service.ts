@@ -58,7 +58,6 @@ type Updation = {
         level: string;
     },
     interests: string[];
-    
 }
 
 type User = {

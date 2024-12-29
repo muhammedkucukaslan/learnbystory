@@ -121,7 +121,7 @@ interface Question {
 type Story = {
     id: string;
     userId: string;
-    interests: string[];  // typo düzeltildi: insterests -> interests
+    interest: string;  
     level: string;
     difficulty: string;
     language: string;
@@ -135,7 +135,7 @@ type Story = {
 type Stories = {
     id: string,
     title: string,
-    interests: string[], // Burada string[] olarak düzenlendi
+    interest: string, // Burada string[] olarak düzenlendi
     language: string,
     level: string,
     length: number,
@@ -151,7 +151,7 @@ type CreationStory = {
     insterests: string[];
     level: string;
     difficulty: string;
-    interests: string[];
+    interest: string;
     language: string;
     length: number;
 }
