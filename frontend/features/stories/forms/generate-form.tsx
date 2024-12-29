@@ -23,6 +23,7 @@ import {
 import ActionButton from "@/components/global/action-button";
 import { Sparkles } from "lucide-react";
 import { useQueryUser } from "@/hooks/queries/user";
+import { useGenerateStory } from "@/hooks/queries/story";
 
 const formSchema = z.object({
   language: z.string(),
@@ -32,23 +33,14 @@ const formSchema = z.object({
 
 export default function GenerateForm() {
   const { data: user, isLoading: isUserLoading } = useQueryUser();
+  const { mutate: generateStory, isPending } = useGenerateStory();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      console.log(values);
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
-    } catch (error) {
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
-    }
+    generateStory(values);
   }
 
   if (isUserLoading) {
@@ -56,8 +48,6 @@ export default function GenerateForm() {
   } else if (!isUserLoading && !user) {
     return <div className="text-destructive">Failed to load user data</div>;
   }
-
-  return;
 
   return (
     <Form {...form}>
@@ -148,10 +138,12 @@ export default function GenerateForm() {
             </FormItem>
           )}
         />
+
         <ActionButton
           type="submit"
           text="Generate"
           icon={<Sparkles size={16} />}
+          loading={isPending}
           className="mx-auto w-full flex flex-col items-stretch justify-center"
         />
       </form>

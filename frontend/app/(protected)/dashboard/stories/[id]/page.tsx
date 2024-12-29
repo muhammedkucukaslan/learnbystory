@@ -8,7 +8,7 @@ type Props = {
 };
 
 const StoryPage = ({ params }: Props) => {
-  return <StoryQuiz />;
+  return <StoryQuiz id={params.id} />;
 };
 
 export default StoryPage;

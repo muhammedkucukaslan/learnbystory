@@ -3,14 +3,16 @@
 import { ButtonProps } from "@/components/ui/button";
 import React from "react";
 import { cn } from "@/lib/utils";
+import Loader from "../loader";
 
 interface Props extends ButtonProps {
   text: string;
   icon: React.ReactNode;
   className?: string;
+  loading?: boolean;
 }
 
-const ActionButton = ({ text, icon, className, ...props }: Props) => {
+const ActionButton = ({ text, icon, className, loading, ...props }: Props) => {
   return (
     <div className="relative group">
       <button
@@ -23,12 +25,14 @@ const ActionButton = ({ text, icon, className, ...props }: Props) => {
         <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         <span className="relative z-10 block px-6 py-3 rounded-xl bg-gray-950">
           <div className="relative z-10 flex items-center justify-center space-x-2">
-            <span className="transition-all duration-500 group-hover:translate-x-1">
-              {icon}
-            </span>
-            <span className="transition-all duration-500 group-hover:translate-x-1 capitalize">
-              {text}
-            </span>
+            <Loader state={loading ? true : false}>
+              <span className="transition-all duration-500 group-hover:translate-x-1">
+                {icon}
+              </span>
+              <span className="transition-all duration-500 group-hover:translate-x-1 capitalize">
+                {text}
+              </span>
+            </Loader>
           </div>
         </span>
       </button>

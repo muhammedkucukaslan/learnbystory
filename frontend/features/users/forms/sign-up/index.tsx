@@ -57,7 +57,7 @@ export default function SignUpForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const data = {
-      name: values.name,
+      username: values.name,
       email: values.email,
       password: values.password,
     };
