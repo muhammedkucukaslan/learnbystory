@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import ActionButton from "@/components/global/action-button";
 import { Sparkles } from "lucide-react";
+import { useQueryUser } from "@/hooks/queries/user";
 
 const formSchema = z.object({
   language: z.string(),
@@ -30,6 +31,8 @@ const formSchema = z.object({
 });
 
 export default function GenerateForm() {
+  const { data: user, isLoading: isUserLoading } = useQueryUser();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -48,6 +51,14 @@ export default function GenerateForm() {
     }
   }
 
+  if (isUserLoading) {
+    return null;
+  } else if (!isUserLoading && !user) {
+    return <div className="text-destructive">Failed to load user data</div>;
+  }
+
+  return;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -64,9 +75,16 @@ export default function GenerateForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  {user.languages.map(
+                    (language: { language: string; level: string }) => (
+                      <SelectItem
+                        key={language.language}
+                        value={language.language}
+                      >
+                        {language.language}
+                      </SelectItem>
+                    )
+                  )}
                 </SelectContent>
               </Select>
               <FormDescription>
@@ -90,12 +108,14 @@ export default function GenerateForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  <SelectItem value="100">100</SelectItem>
+                  <SelectItem value="200">200</SelectItem>
+                  <SelectItem value="300">300</SelectItem>
+                  <SelectItem value="400">400</SelectItem>
+                  <SelectItem value="500">500</SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription>Enter a lentgth for the story</FormDescription>
+              <FormDescription>Select a length for the story</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -114,9 +134,11 @@ export default function GenerateForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  {user.interests.map((interest: any) => (
+                    <SelectItem key={interest} value={interest}>
+                      {interest}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormDescription>

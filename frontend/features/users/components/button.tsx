@@ -55,7 +55,7 @@ const UserButton: React.FC = () => {
             <Button
               variant="ghost"
               className="w-full justify-start gap-2 text-red-600 hover:text-red-600 hover:bg-red-100"
-              onClick={() => logout()}
+              onClick={logout}
             >
               <Loader state={isPending}>
                 <LogOut size={16} />
