@@ -20,14 +20,14 @@ const InterestSelector: React.FC<{
       <div className="flex flex-wrap gap-2">
         {availableInterests.map((interest) => (
           <Badge
-            key={interest.id}
+            key={interest}
             variant={
-              selectedInterests.includes(interest.id) ? "default" : "outline"
+              selectedInterests.includes(interest) ? "default" : "outline"
             }
             className="cursor-pointer hover:opacity-80 "
-            onClick={() => handleInterestSelect(interest.id)}
+            onClick={() => handleInterestSelect(interest)}
           >
-            {interest.name}
+            {interest}
           </Badge>
         ))}
       </div>
