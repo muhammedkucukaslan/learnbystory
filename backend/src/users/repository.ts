@@ -70,7 +70,14 @@ export class UserRepository implements IUserRepository{
         try {
             const result = await this.db.user.update({
                 where: { id },
-                data
+                data : {
+                    languages: {
+                        create: data.languages
+                    },
+                    interests: {
+                        set: data.interests
+                    }
+                }
             });
             if (!result) {
                 return createErrorResult('Error updating user', 'SERVER_ERROR');
@@ -78,6 +85,8 @@ export class UserRepository implements IUserRepository{
 
             return createSuccessResult(null);
         } catch (error) {
+            console.error('error', error);
+
             return createErrorResult('Error updating user', 'SERVER_ERROR');
         }
     }
@@ -97,9 +106,9 @@ type Language = {
 }
 
 type Updation = { 
-    language: {
+    languages: {
         language: string;
         level: string;
-    },
+    }[],
     interests: string[];
 }

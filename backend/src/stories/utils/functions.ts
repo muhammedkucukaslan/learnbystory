@@ -126,22 +126,6 @@ function validateStoryData(data: any): data is PromptStory {
 }
 
 
-function giveTokenSize(wordCount: number): number {
-    const tokensPerWord = 1.33;
-
-    const minToken = 100;
-    const maxToken = 1300;
-
-    let estimatedTokens = Math.ceil(wordCount * tokensPerWord);
-
-    if (estimatedTokens < minToken) {
-        estimatedTokens = minToken;
-    } else if (estimatedTokens > maxToken) {
-        estimatedTokens = maxToken;
-    }
-
-    return estimatedTokens;
-}
 
 function generatePrompt(language: string, level: string, interest: string, length: number): string {
     const prompt = `
@@ -268,7 +252,6 @@ const exampleResponse =
 
 
 export {
-    giveTokenSize,
     generatePrompt,
     askGPT
 }

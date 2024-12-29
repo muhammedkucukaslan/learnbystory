@@ -53,6 +53,7 @@ export class UserHandler {
             }
             return handleSuccessResponse(res, null, 204);
         } catch (error) {
+            console.error('error', error);
             return handleErrorResponse(
                 res,
                 'SERVER_ERROR',
@@ -93,9 +94,9 @@ type User = {
 
 
 type Updation = {
-    language: {
+    languages: {
         language: string;
         level: string;
-    },
+    }[],
     interests: string[];
 }

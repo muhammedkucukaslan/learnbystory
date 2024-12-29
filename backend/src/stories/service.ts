@@ -27,6 +27,8 @@ export class StoryService {
             }
             return createSuccessResult(result.data);
         } catch (error) {
+            console.error('error', error);
+
             return createErrorResult('Internal server error', 'SERVER_ERROR');
         }
     }
@@ -41,6 +43,8 @@ export class StoryService {
 
             return createSuccessResult(result.data);
         } catch (error) {
+            console.error('error', error);
+
             return createErrorResult('Internal server error', 'SERVER_ERROR');
         }
     }
@@ -57,7 +61,6 @@ export class StoryService {
             }
 
             const createdStoryResult = await this.repository.create({
- // Assign a proper id value here
                 userId: data.userId,
                 interest: data.interest,
                 level: data.level,
@@ -88,6 +91,8 @@ export class StoryService {
             }
             return createSuccessResult(null);
         } catch (error) {
+            console.error('error', error);
+
             return createErrorResult('Internal server error', 'SERVER_ERROR');
         }
     }
@@ -100,6 +105,8 @@ export class StoryService {
             }
             return createSuccessResult(null);
         } catch (error) {
+            console.error('error', error);
+
             return createErrorResult('Internal server error', 'SERVER_ERROR');
         }
     }

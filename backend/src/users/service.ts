@@ -60,10 +60,10 @@ export class UserService implements IUserService {
 
 
 type Updation = { 
-    language: {
+    languages: {
         language: string;
         level: string;
-    },
+    }[],
     interests: string[];
 }
 

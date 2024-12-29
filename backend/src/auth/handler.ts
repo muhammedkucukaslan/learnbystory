@@ -43,6 +43,7 @@ export class AuthHandler implements IAuthHandler {
 
             return handleSuccessResponse(res, null, 201);
         } catch (error) {
+            console.error('SIGNUP HANDLER ERROR', error);
             return handleErrorResponse(
                 res,
                 'SERVER_ERROR',
