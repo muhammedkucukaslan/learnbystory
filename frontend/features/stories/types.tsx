@@ -9,7 +9,7 @@ export type Story = {
 
 export type Question = {
   id: number;
-  question: string;
+  text: string;
   options: string[];
   correctAnswer: number;
 };

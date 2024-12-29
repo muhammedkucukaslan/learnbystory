@@ -32,7 +32,7 @@ const Quiz: React.FC<{ questions: Question[] }> = ({ questions }) => {
       <div className="space-y-8">
         {questions.map((q) => (
           <Card key={q.id} className="p-6">
-            <h3 className="text-lg font-semibold mb-4">{q.question}</h3>
+            <h3 className="text-lg font-semibold mb-4">{q.text}</h3>
             <RadioGroup
               onValueChange={(value) => handleAnswer(q.id, parseInt(value))}
               className="space-y-4"
