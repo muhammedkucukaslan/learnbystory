@@ -28,3 +28,11 @@ export const useGenerateStory = () => {
     (data) => router.push(`/stories/${data.id}`)
   );
 };
+
+export const useUpdateStory = () => {
+  return useMutationData(
+    ["stories"],
+    (data) => stories.updateStory(data.id, data),
+    "stories"
+  );
+};

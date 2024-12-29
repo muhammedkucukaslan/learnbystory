@@ -20,8 +20,16 @@ const UserSettingsContainer: React.FC = () => {
   const { mutate: update, isPending } = useUpdateUser();
 
   const handleSave = () => {
-    console.log("Saving settings:", settings);
-    update(settings);
+    const data = {
+      language: {
+        language: settings.learningLanguages[0],
+        level: settings.proficiency[settings.learningLanguages[0]],
+      },
+      interests: settings.interests,
+    };
+
+    console.log("Saving settings:", data);
+    update(data);
   };
 
   return (

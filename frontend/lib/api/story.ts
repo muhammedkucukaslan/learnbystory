@@ -19,4 +19,9 @@ export const stories = {
     const response = await apiClient.post("/stories", data);
     return response.data;
   },
+
+  updateStory: async (id: string, data: { result: number }) => {
+    const response = await apiClient.put(`/stories/${id}`, data);
+    return response.data;
+  },
 };
