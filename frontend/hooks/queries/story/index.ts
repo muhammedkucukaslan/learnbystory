@@ -29,9 +29,9 @@ export const useGenerateStory = () => {
   );
 };
 
-export const useUpdateStory = () => {
+export const useUpdateStory = (id: string) => {
   return useMutationData(
-    ["stories"],
+    ["stories", id],
     (data) => stories.updateStory(data.id, data),
     "stories"
   );

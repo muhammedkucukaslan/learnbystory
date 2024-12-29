@@ -14,6 +14,7 @@ import {
 import StoryCard from "../story-list/card";
 import { useQueryStories } from "@/hooks/queries/story";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 const StoryShowcase = () => {
   const { data: stories, isLoading, isError } = useQueryStories();
@@ -44,6 +45,13 @@ const StoryShowcase = () => {
     );
   }
 
+  const getBasisClass = (totalStories: number) => {
+    if (totalStories > 3) return "basis-1/3";
+    if (totalStories === 3) return "basis-1/3";
+    if (totalStories === 2) return "basis-1/2";
+    return "basis-full";
+  };
+
   return (
     <Carousel
       opts={{
@@ -58,13 +66,23 @@ const StoryShowcase = () => {
     >
       <CarouselContent>
         {stories.map((story: any) => (
-          <CarouselItem key={story._id} className="md:basis-1/2 lg:basis-1/3">
+          <CarouselItem
+            key={story._id}
+            className={cn(
+              getBasisClass(stories.length),
+              "md:basis-1/2 lg:" + getBasisClass(stories.length)
+            )}
+          >
             <StoryCard story={story} />
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      {stories.length > 1 && (
+        <>
+          <CarouselPrevious />
+          <CarouselNext />
+        </>
+      )}
     </Carousel>
   );
 };

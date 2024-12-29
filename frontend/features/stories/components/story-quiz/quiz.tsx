@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { Question } from "../../types";
 import { useUpdateStory } from "@/hooks/queries/story";
+import Loader from "@/components/global/loader";
 
 const Quiz: React.FC<{ questions: Question[]; id: string }> = ({
   questions,
@@ -31,7 +32,7 @@ const Quiz: React.FC<{ questions: Question[]; id: string }> = ({
     return correct;
   };
 
-  const { mutate: update, isPending } = useUpdateStory();
+  const { mutate: update, isPending } = useUpdateStory(id);
 
   const handleSubmit = () => {
     update({
@@ -84,10 +85,12 @@ const Quiz: React.FC<{ questions: Question[]; id: string }> = ({
             handleSubmit();
           }}
           disabled={
-            showResults || Object.keys(answers).length !== questions.length
+            showResults ||
+            Object.keys(answers).length !== questions.length ||
+            isPending
           }
         >
-          Submit Answers
+          <Loader state={isPending}>Submit Quiz</Loader>
         </Button>
 
         {showResults && (
