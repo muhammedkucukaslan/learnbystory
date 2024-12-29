@@ -124,7 +124,7 @@ export class StoryRepository implements IStoryRepository {
                     level: true,
                     difficulty: true,
                     createdAt: true,
-                    Question: {  // 'Question' büyük harf ile döndüğü için bunu küçük harfe dönüştürmeliyiz
+                    Question: {
                         select: {
                             id: true,
                             text: true,
@@ -146,7 +146,8 @@ export class StoryRepository implements IStoryRepository {
                 createdAt: story.createdAt  // Date tipini olduğu gibi kullanıyoruz
             };
 
-            return createSuccessResult(formattedStory);
+            const { Question, ...restOfFormattedStory } = formattedStory;
+            return createSuccessResult(restOfFormattedStory);
         } catch (error) {
             console.error(error);
             return createErrorResult('Internal server error', 'SERVER_ERROR');
@@ -175,7 +176,7 @@ type Story = {
     length: number;
     title: string;
     content: string;
-    questions: Question[];  // Question yerine questions olmalı
+    questions: Question[];
     createdAt: Date;  // createdAt, string yerine Date tipinde olmalı
 }
 
