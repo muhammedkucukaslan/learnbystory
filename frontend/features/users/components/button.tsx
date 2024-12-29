@@ -6,27 +6,31 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, Settings } from "lucide-react";
+import { Loader2, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { useLogout } from "@/hooks/queries/auth";
 import Loader from "@/components/global/loader";
 import { useQueryUser } from "@/hooks/queries/user";
 
 const UserButton: React.FC = () => {
-  const { data: user } = useQueryUser();
-
+  const { data: user, isLoading } = useQueryUser();
   const { mutate: logout, isPending } = useLogout();
 
-  return null;
+  if (isLoading) {
+    return (
+      <Button variant="ghost" className="h-10 w-10 rounded-full">
+        <Loader2 size={24} className="animate-spin" />
+      </Button>
+    );
+  }
 
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={user.username} alt={user.username} />
             <AvatarFallback className="bg-primary/10">
-              {user.name.slice(0, 2).toUpperCase()}
+              {user.username.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </Button>
