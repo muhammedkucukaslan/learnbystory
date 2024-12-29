@@ -13,18 +13,11 @@ import Link from "next/link";
 
 type Props = {
   story: Story;
-  slug?: string;
 };
 
-const StoryCard = ({ story, slug }: Props) => {
+const StoryCard = ({ story }: Props) => {
   return (
-    <Link
-      href={
-        slug
-          ? `/dashboard/${slug}/stories/${story._id}`
-          : `stories/${story._id}`
-      }
-    >
+    <Link href={`/dashboard/stories/${story._id}`}>
       <Card className="h-full">
         <CardHeader className="flex flex-col items-center">
           <CardTitle className="text-2xl md:text-3xl text-center truncate max-w-full">

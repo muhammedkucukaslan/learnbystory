@@ -1,14 +1,16 @@
 import axios from "axios";
-import { toast } from "sonner";
 
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => response.data,
   (error) => {
-    toast.error(error.response?.data?.message || "An error occurred");
     return Promise.reject(error);
   }
 );

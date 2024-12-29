@@ -1,18 +1,19 @@
-import { redirect } from "next/navigation";
+import StoryShowcase from "@/features/stories/components/carousel";
+import GenerateButton from "@/features/stories/components/generate-button";
+import React from "react";
 
-const Page = async () => {
-  const user = {
-    status: 200,
-    data: {
-      firstname: "John",
-      lastname: "Doe",
-    },
-  };
-  if (user.status === 200 || user.status === 201) {
-    return redirect(`dashboard/${user.data?.firstname}${user.data?.lastname}`);
-  }
+const Page = () => {
+  return (
+    <div className="flex flex-col gap-y-16 items-center">
+      <h3 className="text-lg md:text-2xl lg:text-6xl font-bold">Hello !</h3>
 
-  return redirect("/sign-in");
+      <div className="px-12 mx-auto container">
+        <StoryShowcase />
+      </div>
+
+      <GenerateButton />
+    </div>
+  );
 };
 
 export default Page;

@@ -5,18 +5,17 @@ import React from "react";
 
 type Props = {
   page: string;
-  slug: string;
 };
 
-const Items = ({ page, slug }: Props) => {
+const Items = ({ page }: Props) => {
   return SIDEBAR_MENU.map((item) => (
     <Link
       key={item.id}
-      href={`/dashboard/${slug}/${item.label === "home" ? "/" : item.label}`}
+      href={`/dashboard/${item.label === "home" ? "/" : item.label}`}
       className={cn(
         "capitalize flex gap-x-2 rounded-full font-medium p-3 items-center",
         page === item.label && "bg-slate-500/20",
-        page === slug && item.label === "home"
+        page === "dashboard" && item.label === "home"
           ? "bg-slate-500/20"
           : "text-secondary-foreground"
       )}

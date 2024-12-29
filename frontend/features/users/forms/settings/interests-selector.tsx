@@ -24,7 +24,7 @@ const InterestSelector: React.FC<{
             variant={
               selectedInterests.includes(interest.id) ? "default" : "outline"
             }
-            className="cursor-pointer hover:opacity-80"
+            className="cursor-pointer hover:opacity-80 "
             onClick={() => handleInterestSelect(interest.id)}
           >
             {interest.name}

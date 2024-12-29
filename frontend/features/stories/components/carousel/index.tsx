@@ -64,11 +64,7 @@ const stories: Story[] = [
   },
 ];
 
-type Props = {
-  slug: string;
-};
-
-const StoryShowcase = ({ slug }: Props) => {
+const StoryShowcase = () => {
   return (
     <Carousel
       opts={{
@@ -84,7 +80,7 @@ const StoryShowcase = ({ slug }: Props) => {
       <CarouselContent>
         {stories.map((story) => (
           <CarouselItem key={story._id} className="md:basis-1/2 lg:basis-1/3">
-            <StoryCard story={story} slug={slug} />
+            <StoryCard story={story} />
           </CarouselItem>
         ))}
       </CarouselContent>

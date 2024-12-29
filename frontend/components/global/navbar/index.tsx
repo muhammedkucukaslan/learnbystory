@@ -6,11 +6,7 @@ import React from "react";
 import Items from "./items";
 import UserButton from "@/features/users/components/button";
 
-type Props = {
-  slug: string;
-};
-
-const Navbar = ({ slug }: Props) => {
+const Navbar = () => {
   const { page } = usePaths();
 
   return (
@@ -20,10 +16,10 @@ const Navbar = ({ slug }: Props) => {
       </Link>
 
       <div className="hidden md:flex absolute inset-0 justify-center items-center gap-x-4">
-        <Items page={page} slug={slug} />
+        <Items page={page} />
       </div>
 
-      <UserButton slug={slug} />
+      <UserButton />
     </nav>
   );
 };

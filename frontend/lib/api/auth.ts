@@ -11,20 +11,15 @@ interface LoginData {
   password: string;
 }
 
-interface AuthResponse {
-  user: any;
-  token: string;
-}
-
 export const auth = {
-  signup: async (data: SignupData): Promise<AuthResponse> => {
-    const response = await apiClient.post("/auth/signup", data);
-    return response.data;
+  signup: async (data: SignupData) => {
+    const response = await apiClient.post("/signup", data);
+    return response;
   },
 
-  login: async (data: LoginData): Promise<AuthResponse> => {
-    const response = await apiClient.post("/auth/login", data);
-    return response.data;
+  login: async (data: LoginData) => {
+    const response = await apiClient.post("/login", data);
+    return response;
   },
 
   logout: async () => {
@@ -32,7 +27,7 @@ export const auth = {
   },
 
   getCurrentUser: async () => {
-    const response = await apiClient.get("/auth/me");
+    const response = await apiClient.get("/users");
     return response.data;
   },
 };

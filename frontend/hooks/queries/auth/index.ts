@@ -1,26 +1,29 @@
 import { auth } from "@/lib/api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export const useSignIn = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: auth.login,
-    onSuccess: (data) => {
-      queryClient.setQueryData(["user", data.id], data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["auth"] });
+      router.push("/dashboard");
     },
   });
 };
 
 export const useSignup = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: auth.signup,
-    onSuccess: (data) => {
-      queryClient.setQueryData(["user", data.id], data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["auth"] });
+      router.push("/dashboard");
     },
   });
 };
