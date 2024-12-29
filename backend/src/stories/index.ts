@@ -1,4 +1,4 @@
-export { UserRepository } from './repository';
-export { UserService } from './service';
-export { UserHandler } from './handler';
-export { UserRouter } from './router';
+export { StoryRepository  } from './repository';
+export { StoryService } from './service';
+export { StoryHandler } from './handler';
+export { StoryRouter } from './router';

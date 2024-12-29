@@ -13,12 +13,17 @@ const app = express()
 
 app.use(cookieParser());
 app.use(middleware);
-app.use(cors());
+app.use(cors(
+    {
+        origin: process.env.CLIENT_URL,
+        credentials: true,
+    }
+));
 app.use(express.json());
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-app.use(timeout('5s'));
+app.use(timeout('20s'));
 app.use(
     rateLimit({
         windowMs: 60 * 1000,
@@ -29,6 +34,7 @@ app.use(
 import prisma from './config/db'
 import { AuthRepository, AuthService, AuthHandler, AuthRouter } from './auth';
 import { UserRepository, UserService, UserHandler, UserRouter } from './users';
+import { StoryRepository, StoryService, StoryHandler, StoryRouter } from './stories';
 
 
 const authRepository = new AuthRepository(prisma);
@@ -41,6 +47,15 @@ const userService = new UserService(userRepository);
 const userHandler = new UserHandler(userService);
 const userRouter = new UserRouter(userHandler);
 
+
+
+const storyRepository = new StoryRepository(prisma);
+const storyService = new StoryService(storyRepository);
+const storyHandler = new StoryHandler(storyService);
+const storyRouter = new StoryRouter(storyHandler);
+
+
+app.use('/api/stories', storyRouter.getRouter());
 app.use('/api/users', userRouter.getRouter());
 app.use('/api', authRouter.getRouter());
 
@@ -49,8 +64,8 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-const PORT = 3000
+const PORT = process.env.PORT || 8000
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log(`Server listening at http://localhost:${PORT}`)
 })

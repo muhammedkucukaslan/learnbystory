@@ -19,26 +19,34 @@ model User {
   Story     Story[]
 }
 
-model Story {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  content   String
-  userId    String     @db.ObjectId
-  user      User       @relation(fields: [userId], references: [id])
-  result    Result?
-  createdAt DateTime   @default(now())
-  resultId  String?    @db.ObjectId
-  Question  Question[]
+model Question {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  text          String
+  answer        String
+  options       String[] 
+  correctAnswer Int      
+  storyId       String   @db.ObjectId
+  story         Story    @relation(fields: [storyId], references: [id])
+  createdAt     DateTime @default(now())
 }
 
-model Question {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  text      String
-  answer    String
-  storyId   String   @db.ObjectId
-  story     Story    @relation(fields: [storyId], references: [id])
-  createdAt DateTime @default(now())
+model Story {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  content      String
+  level        String
+  interests    String[]
+  language     String
+  length       Int
+  difficulty   String
+  userId       String     @db.ObjectId
+  user         User       @relation(fields: [userId], references: [id])
+  result       Result?
+  createdAt    DateTime   @default(now())
+  resultId     String?    @db.ObjectId
+  Question     Question[]
 }
+
 
 model Result {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
