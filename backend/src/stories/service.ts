@@ -57,12 +57,10 @@ export class StoryService implements IStoryService {
 
             const prompt = generatePrompt(data.language, data.level, data.interests, data.length);
             
-            const tokenSize = giveTokenSize(data.length);
-            const aiResult = await askGPT(prompt, tokenSize);
+            const aiResult = await askGPT(prompt) as IResult<ResponsePrompt>;
             if (!aiResult.success) {
                 return createErrorResult(aiResult.message, aiResult.ERR_CODE);
             }
-            console.log(aiResult.data);
 
             const createdStoryResult = await this.repository.create({
                 userId: data.userId,
@@ -99,7 +97,7 @@ export class StoryService implements IStoryService {
     }
 }
 
-interface PromptStory {
+interface ResponsePrompt {
     id: string;
     title: string;
     content: string;
