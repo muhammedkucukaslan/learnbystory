@@ -8,6 +8,8 @@ import { UserSettings } from "@/features/users/types";
 
 import InterestSelector from "./interests-selector";
 import LanguageSelector from "./language-selector";
+import { useUpdateUser } from "@/hooks/queries/user";
+import Loader from "@/components/global/loader";
 
 const UserSettingsContainer: React.FC = () => {
   const [settings, setSettings] = useState<UserSettings>({
@@ -15,9 +17,11 @@ const UserSettingsContainer: React.FC = () => {
     learningLanguages: [],
     proficiency: {},
   });
+  const { mutate: update, isPending } = useUpdateUser();
 
   const handleSave = () => {
     console.log("Saving settings:", settings);
+    update(settings);
   };
 
   return (
@@ -49,7 +53,9 @@ const UserSettingsContainer: React.FC = () => {
           />
 
           <div className="flex justify-end">
-            <Button onClick={handleSave}>Save Changes</Button>
+            <Button disabled={isPending} onClick={handleSave}>
+              <Loader state={isPending}>Save changes</Loader>
+            </Button>
           </div>
         </CardContent>
       </Card>
