@@ -5,7 +5,7 @@ import { IResponse, IResult } from '../types/global';
 interface IStoryService {
     getStories: (userId: string) => Promise<IResult<Stories>>;
     getStory: (id: string) => Promise<IResult<Story>>;
-    create: (data: CreationStory) => Promise<IResult>;
+    create: (data: CreationStory) => Promise<IResult<{ id: string }>>;
     delete: (id: string) => Promise<IResult>;
 }
 
@@ -84,7 +84,7 @@ export class StoryHandler {
         }
     }
 
-    public async create(req: Request, res: Response): Promise<IResponse> {
+    public async create(req: Request, res: Response): Promise<IResponse<{ id: string }>> {
         try {
             const id: string = req.headers['x-user-id'] as string;
             const data = req.body
@@ -96,7 +96,8 @@ export class StoryHandler {
                     result.message
                 );
             }
-            return handleSuccessResponse(res, null, 204);
+
+            return handleSuccessResponse(res, { id: result.data.id }, 201);
         } catch (error) {
             console.error('error', error);
             return handleErrorResponse(

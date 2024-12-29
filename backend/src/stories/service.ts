@@ -3,22 +3,17 @@ import { createSuccessResult, createErrorResult } from '../utils/functions';
 import { giveTokenSize, generatePrompt, askGPT } from './utils/functions';
 
 
-interface IStoryService {
-    getStories: (userId: string) => Promise<IResult<Stories>>;
-    getStory: (id: string) => Promise<IResult<Story>>;
-    create: (data: CreationStory) => Promise<IResult>;
-    delete: (id: string) => Promise<IResult>;
-}
+
 
 
 interface IStoryRepository {
     getStories: (userId: string) => Promise<IResult<Stories>>;
     getStory: (id: string) => Promise<IResult<Story>>;
-    create: (data: Story) => Promise<IResult>;
+    create: (data: CreationStory) => Promise<IResult<{ id: string }>>;
     delete: (id: string) => Promise<IResult>;
 }
 
-export class StoryService implements IStoryService {
+export class StoryService {
     private repository: IStoryRepository;
 
     constructor(repository: IStoryRepository) {
@@ -51,12 +46,12 @@ export class StoryService implements IStoryService {
         }
     }
 
-    public async create(data: CreationStory): Promise<IResult> {
+    public async create(data: CreationStory): Promise<IResult<{ id: string }>> {
         try {
 
 
             const prompt = generatePrompt(data.language, data.level, data.interests, data.length);
-            
+
             const aiResult = await askGPT(prompt) as IResult<ResponsePrompt>;
             if (!aiResult.success) {
                 return createErrorResult(aiResult.message, aiResult.ERR_CODE);
@@ -68,7 +63,6 @@ export class StoryService implements IStoryService {
                 level: data.level,
                 length: data.length,
                 language: data.language,
-                createdAt: new Date(),
                 difficulty: data.difficulty,
                 ...aiResult.data
             })
@@ -77,7 +71,8 @@ export class StoryService implements IStoryService {
                 return createErrorResult(createdStoryResult.message, createdStoryResult.ERR_CODE);
             }
 
-            return createSuccessResult(null);
+
+            return createSuccessResult({ id: createdStoryResult.data.id });
         } catch (error) {
             console.error(error);
             return createErrorResult('Internal server error', 'SERVER_ERROR');
@@ -98,14 +93,12 @@ export class StoryService implements IStoryService {
 }
 
 interface ResponsePrompt {
-    id: string;
     title: string;
     content: string;
     questions: Question[];
 }
 
 interface Question {
-    id: string;
     text: string;
     options: string[];
     correctAnswer: number;
@@ -143,9 +136,17 @@ type Stories = {
 
 type CreationStory = {
     userId: string;
-    interests: string[];
+    interests: string[];  // typo düzeltildi: insterests -> interests
     level: string;
-    difficulty:string;
+    difficulty: string;
     language: string;
     length: number;
+    title: string;
+    content: string;
+    questions: CreationQuestion[];
+}
+type CreationQuestion = {
+    text: string;
+    options: string[];
+    correctAnswer: number;
 }

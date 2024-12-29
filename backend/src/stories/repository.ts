@@ -6,7 +6,7 @@ import prisma from '../config/db';
 interface IStoryRepository {
     getStories: (userId: string) => Promise<IResult<Stories>>;
     getStory: (id: string) => Promise<IResult<Story>>;
-    create: (data: Story) => Promise<IResult>;
+    create: (data: Story) => Promise<IResult<{ id: string }>>;
     delete: (id: string) => Promise<IResult>;
 }
 export class StoryRepository implements IStoryRepository {
@@ -16,7 +16,7 @@ export class StoryRepository implements IStoryRepository {
         this.db = dbClient;
     }
 
-    public async create(data: Story): Promise<IResult> {
+    public async create(data: Story): Promise<IResult<{ id: string }>> {
         try {
             await this.db.story.create({
                 data: {
@@ -38,7 +38,7 @@ export class StoryRepository implements IStoryRepository {
                     }
                 }
             });
-            return createSuccessResult(null);
+            return createSuccessResult({ id: data.id });
         } catch (error) {
             console.error(error);
             return createErrorResult('Internal server error', 'SERVER_ERROR');
