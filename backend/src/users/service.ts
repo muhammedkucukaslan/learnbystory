@@ -4,7 +4,7 @@ import { createSuccessResult, createErrorResult } from '../utils/functions';
 interface IUserRepository {
     getUser: (id: string) => Promise<IResult<User>>;
     delete: (id: string) => Promise<IResult>;
-    updateUser: (id: string, username: string) => Promise<IResult>;
+    updateUser: (id: string, data: Updation) => Promise<IResult>;
 }
 
 export class UserService {
@@ -38,9 +38,9 @@ export class UserService {
         }
     }
 
-    public async updateUser(id: string, username: string): Promise<IResult> {
+    public async updateUser(id: string, data: Updation): Promise<IResult> {
         try {
-            const result = await this.repository.updateUser(id, username);
+            const result = await this.repository.updateUser(id, data);
             if (!result.success) {
                 return createErrorResult(result.message, result.ERR_CODE);
             }
@@ -51,8 +51,25 @@ export class UserService {
     }
 }
 
+
+type Updation = { 
+    language: {
+        language: string;
+        level: string;
+    },
+    interests: string[];
+    
+}
+
 type User = {
     id: string;
     username: string;
     email: string;
+    interests: string[];
+    languages: Language[];
 };
+
+type Language = {
+    language: String
+    level: String
+}

@@ -38,6 +38,19 @@ export class AuthRepository {
                     email,
                     name: username,
                     password,
+                    interests: [
+                        "Technology",
+                        "Science",
+                        "Art",
+                    ],
+                    languages: {
+                        create: [
+                            {
+                                language: "English",
+                                level: "A1"
+                            }
+                        ]
+                    }
                 }
             })
 

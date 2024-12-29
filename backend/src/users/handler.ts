@@ -5,7 +5,7 @@ import { IResponse, IResult } from '../types/global';
 interface IUserService {
     getUser: (id: string) => Promise<IResult<User>>;
     deleteUser: (id: string) => Promise<IResult>;
-    updateUser: (id: string, username: string) => Promise<IResult>;
+    updateUser: (id: string, data: Updation ) => Promise<IResult>;
 }
 
 export class UserHandler {
@@ -64,8 +64,8 @@ export class UserHandler {
     public async update(req: Request, res: Response): Promise<IResponse> {
         try {
             const id: string = req.headers['x-user-id'] as string;
-            const { username } = req.body;
-            const result = await this.service.updateUser(id, username);
+            const data = req.body;
+            const result = await this.service.updateUser(id, data);
             if (!result.success) {
                 return handleErrorResponse(
                     res,
@@ -90,3 +90,13 @@ type User = {
     username: string;
     email: string;
 };
+
+
+type Updation = { 
+    language: {
+        language: string;
+        level: string;
+    },
+    interests: string[];
+    
+}

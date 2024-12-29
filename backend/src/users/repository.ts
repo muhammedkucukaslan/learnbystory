@@ -12,7 +12,19 @@ export class UserRepository {
     public async getUser(id: string): Promise<IResult<User>> {
         try {
             const result = await this.db.user.findUnique({
-                where: { id }
+                where: { id },
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    interests: true,
+                    languages: {
+                        select: {
+                            language: true,
+                            level: true
+                        }
+                    }
+                }
             })
 
             if (!result) {
@@ -22,7 +34,9 @@ export class UserRepository {
             return createSuccessResult({
                 id: result.id,
                 username: result.name,
-                email: result.email
+                email: result.email,
+                interests: result.interests,
+                languages: result.languages
             });
         } catch (error) {
             console.error('error', error);
@@ -38,7 +52,7 @@ export class UserRepository {
             if (!result) {
                 return createErrorResult('Error deleting user', 'SERVER_ERROR');
             }
-            
+
             return createSuccessResult(null);
         } catch (error) {
             console.error('error', error);
@@ -55,7 +69,7 @@ export class UserRepository {
             if (!result) {
                 return createErrorResult('Error updating user', 'SERVER_ERROR');
             }
-            
+
             return createSuccessResult(null);
         } catch (error) {
             return createErrorResult('Error updating user', 'SERVER_ERROR');
@@ -67,4 +81,11 @@ type User = {
     id: string;
     username: string;
     email: string;
+    interests: string[];
+    languages: Language[];
 };
+
+type Language = {
+    language: String
+    level: String
+}
