@@ -11,8 +11,10 @@ import Link from "next/link";
 import { useLogout } from "@/hooks/queries/auth";
 import Loader from "@/components/global/loader";
 import { useQueryUser } from "@/hooks/queries/user";
+import { useRouter } from "next/navigation";
 
 const UserButton: React.FC = () => {
+  const router = useRouter();
   const { data: user, isLoading } = useQueryUser();
   const { mutate: logout, isPending } = useLogout();
 

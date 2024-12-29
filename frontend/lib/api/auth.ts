@@ -14,6 +14,7 @@ interface LoginData {
 export const auth = {
   signup: async (data: SignupData) => {
     const response = await apiClient.post("/signup", data);
+    console.log(response);
     return response;
   },
 
@@ -23,7 +24,7 @@ export const auth = {
   },
 
   logout: async () => {
-    await apiClient.post("/auth/logout");
+    await apiClient.post("/logout");
   },
 
   getCurrentUser: async () => {

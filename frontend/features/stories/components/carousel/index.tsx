@@ -16,7 +16,7 @@ import { useQueryStories } from "@/hooks/queries/story";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const StoryShowcase = () => {
-  const { data: stories, isLoading } = useQueryStories();
+  const { data: stories, isLoading, isError } = useQueryStories();
 
   if (isLoading) {
     return (
@@ -28,7 +28,7 @@ const StoryShowcase = () => {
     );
   }
 
-  if (!isLoading && !stories?.length) {
+  if (!isLoading && stories?.length <= 0) {
     return (
       <h2 className="text-lg font-medium text-center">
         No stories. You can create one by clicking the button below.
@@ -36,7 +36,13 @@ const StoryShowcase = () => {
     );
   }
 
-  console.log(stories);
+  if (isError) {
+    return (
+      <h2 className="text-lg font-medium text-center text-destructive">
+        An error occurred while fetching stories. Please try again later.
+      </h2>
+    );
+  }
 
   return (
     <Carousel

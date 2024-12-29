@@ -1,40 +1,28 @@
+import { useMutationData } from "@/hooks/use-mutation-data";
 import { auth } from "@/lib/api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export const useSignIn = () => {
-  const queryClient = useQueryClient();
   const router = useRouter();
 
-  return useMutation({
-    mutationFn: auth.login,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auth"] });
-      router.push("/dashboard");
-    },
-  });
+  return useMutationData(["auth"], auth.login, "auth", () =>
+    router.push("/dashboard")
+  );
 };
 
 export const useSignup = () => {
-  const queryClient = useQueryClient();
   const router = useRouter();
 
-  return useMutation({
-    mutationFn: auth.signup,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auth"] });
-      router.push("/dashboard");
-    },
-  });
+  return useMutationData(["auth"], auth.signup, "auth", () =>
+    router.push("/dashboard")
+  );
 };
 
 export const useLogout = () => {
-  const queryClient = useQueryClient();
+  const router = useRouter();
 
-  return useMutation({
-    mutationFn: auth.logout,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["auth"] });
-    },
-  });
+  return useMutationData(["auth"], auth.logout, "auth", () =>
+    router.push("/sign-in")
+  );
 };
