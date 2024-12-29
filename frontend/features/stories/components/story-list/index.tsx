@@ -1,62 +1,43 @@
+"use client";
+
 import React from "react";
 import { Story } from "../../types";
 import StoryCard from "./card";
-
-const stories: Story[] = [
-  {
-    _id: "1",
-    title: "Story of a developer",
-    content: "Content 1",
-    field: "Field 1",
-    result: "Result 1",
-    createdAt: new Date(),
-  },
-  {
-    _id: "2",
-    title: "Story of a designer",
-    content: "Content 2",
-    field: "Field 2",
-    result: "Result 2",
-    createdAt: new Date(),
-  },
-  {
-    _id: "3",
-    title: "Story of a manager",
-    content: "Content 3",
-    field: "Field 3",
-    result: "Result 3",
-    createdAt: new Date(),
-  },
-  {
-    _id: "4",
-    title: "Story of a developer",
-    content: "Content 1",
-    field: "Field 1",
-    result: "Result 1",
-    createdAt: new Date(),
-  },
-  {
-    _id: "5",
-    title: "Story of a designer",
-    content: "Content 2",
-    field: "Field 2",
-    result: "Result 2",
-    createdAt: new Date(),
-  },
-  {
-    _id: "6",
-    title: "Story of a manager",
-    content: "Content 3",
-    field: "Field 3",
-    result: "Result 3",
-    createdAt: new Date(),
-  },
-];
+import { Skeleton } from "@/components/ui/skeleton";
+import { useQueryStories } from "@/hooks/queries/story";
 
 const StoryList = () => {
+  const { data: stories, isLoading, isError } = useQueryStories();
+
+  if (isLoading) {
+    return (
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Skeleton className="h-64" />
+        <Skeleton className="h-64" />
+        <Skeleton className="h-64" />
+      </div>
+    );
+  }
+
+  if (!isLoading && stories?.length <= 0) {
+    return (
+      <h2 className="text-lg font-medium text-center">
+        No stories. You can create one by clicking the button below.
+      </h2>
+    );
+  }
+
+  if (isError) {
+    return (
+      <h2 className="text-lg font-medium text-center text-destructive">
+        An error occurred while fetching stories. Please try again later.
+      </h2>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {stories.map((story) => (
+      {stories.map((story: any) => (
         <StoryCard key={story._id} story={story} />
       ))}
     </div>
