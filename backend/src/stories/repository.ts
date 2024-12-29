@@ -2,69 +2,192 @@ import { IResult } from '../types/global';
 import { createSuccessResult, createErrorResult } from '../utils/functions';
 import prisma from '../config/db';
 
-export class UserRepository {
+
+interface IStoryRepository {
+    getStories: (userId: string) => Promise<IResult<Stories>>;
+    getStory: (id: string) => Promise<IResult<Story>>;
+    create: (data: Story) => Promise<IResult>;
+    delete: (id: string) => Promise<IResult>;
+}
+export class StoryRepository implements IStoryRepository {
     private db: typeof prisma;
 
     constructor(dbClient: typeof prisma) {
         this.db = dbClient;
     }
 
-    public async getUser(id: string): Promise<IResult<User>> {
+    public async create(data: Story): Promise<IResult> {
         try {
-            const result = await this.db.user.findUnique({
-                where: { id }
-            })
-
-            if (!result) {
-                return createErrorResult('User not found', 'USER_NOT_FOUND');
-            }
-
-            return createSuccessResult({
-                id: result.id,
-                username: result.name,
-                email: result.email
+            await this.db.story.create({
+                data: {
+                    userId: data.userId,
+                    interests: data.interests,
+                    level: data.level,
+                    language: data.language,
+                    difficulty: data.difficulty,
+                    length: data.length,
+                    title: data.title,
+                    content: data.content,
+                    Question: {
+                        create: data.questions.map((question) => ({
+                            text: question.text,
+                            options: question.options,
+                            answer: question.options[question.correctAnswer], // Doğru cevabı kaydediyoruz
+                            correctAnswer: question.correctAnswer,
+                        }))
+                    }
+                }
             });
+            return createSuccessResult(null);
         } catch (error) {
-            console.error('error', error);
-            return createErrorResult('Error fetching user', 'SERVER_ERROR');
+            console.error(error);
+            return createErrorResult('Internal server error', 'SERVER_ERROR');
         }
     }
 
     public async delete(id: string): Promise<IResult> {
         try {
-            const result = await this.db.user.delete({
-                where: { id }
+            const deleteQuestions = this.db.question.deleteMany({
+                where: {
+                    storyId: id
+                }
+            })
+
+
+            const deleteStory = this.db.story.delete({
+                where: {
+                    id
+                }
             });
-            if (!result) {
-                return createErrorResult('Error deleting user', 'SERVER_ERROR');
-            }
-            
+
+
+            await this.db.$transaction([deleteQuestions, deleteStory]);
+
             return createSuccessResult(null);
         } catch (error) {
-            console.error('error', error);
-            return createErrorResult('Error deleting user', 'SERVER_ERROR');
+            console.error(error);
+            return createErrorResult('Internal server error', 'SERVER_ERROR');
         }
     }
 
-    public async updateUser(id: string, username: string): Promise<IResult> {
+    public async getStories(userId: string): Promise<IResult<Stories>> {
         try {
-            const result = await this.db.user.update({
-                where: { id },
-                data: { name: username }
+            const stories = await this.db.story.findMany({
+                where: {
+                    userId
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    interests: true,  // interests string[] olacak
+                    language: true,
+                    length: true,
+                    level: true,
+                    difficulty: true,
+                    result: {
+                        select: {
+                            score: true
+                        }
+                    },
+                    createdAt: true
+                }
             });
-            if (!result) {
-                return createErrorResult('Error updating user', 'SERVER_ERROR');
+
+            if (!stories) {
+                return createErrorResult('Stories not found', 'NOT_FOUND');
             }
-            
-            return createSuccessResult(null);
+
+            const formattedStories = stories.map(story => ({
+                ...story,
+                result: story.result ? story.result.score : null
+            }));
+
+            return createSuccessResult(formattedStories);
         } catch (error) {
-            return createErrorResult('Error updating user', 'SERVER_ERROR');
+            console.error(error);
+            return createErrorResult('Internal server error', 'SERVER_ERROR');
         }
     }
+
+    public async getStory(id: string): Promise<IResult<Story>> {
+        try {
+            const story = await this.db.story.findUnique({
+                where: { id },
+                select: {
+                    id: true,
+                    userId: true,
+                    title: true,
+                    content: true,
+                    interests: true,
+                    language: true,
+                    length: true,
+                    level: true,
+                    difficulty: true,
+                    createdAt: true,
+                    Question: {  // 'Question' büyük harf ile döndüğü için bunu küçük harfe dönüştürmeliyiz
+                        select: {
+                            id: true,
+                            text: true,
+                            options: true,
+                            correctAnswer: true
+                        }
+                    }
+                }
+            });
+
+            if (!story) {
+                return createErrorResult('Story not found', 'NOT_FOUND');
+            }
+
+            // 'Question' alanını 'questions' olarak yeniden adlandırıyoruz
+            const formattedStory = {
+                ...story,
+                questions: story.Question,  // 'Question' -> 'questions'
+                createdAt: story.createdAt  // Date tipini olduğu gibi kullanıyoruz
+            };
+
+            return createSuccessResult(formattedStory);
+        } catch (error) {
+            console.error(error);
+            return createErrorResult('Internal server error', 'SERVER_ERROR');
+        }
+    }
+
+
+
 }
 
-type User = {
+
+interface Question {
     id: string;
-    username: string;
-    email: string;
-};
+    text: string;
+    options: string[];
+    correctAnswer: number;
+}
+
+type Story = {
+    id: string;
+    userId: string;
+    interests: string[];  // typo düzeltildi: insterests -> interests
+    level: string;
+    difficulty: string;
+    language: string;
+    length: number;
+    title: string;
+    content: string;
+    questions: Question[];  // Question yerine questions olmalı
+    createdAt: Date;  // createdAt, string yerine Date tipinde olmalı
+}
+
+
+type Stories = {
+    id: string,
+    title: string,
+    interests: string[], // Burada string[] olarak düzenlendi
+    language: string,
+    level: string,
+    length: number,
+    difficulty: string,
+    result: number | null, // Burada score null olabileceği için number | null yaptık
+    createdAt: Date
+}[]

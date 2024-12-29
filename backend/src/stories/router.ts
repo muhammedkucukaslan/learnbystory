@@ -1,7 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { IResponse } from '../types/global';
-import { validateRequest } from '../utils/middleware';
-import { userValidation } from './utils/validation';
+
 
 interface IStoryHandler {
     getStories: (req: Request, res: Response) => Promise<IResponse<Stories>>;
@@ -10,19 +9,20 @@ interface IStoryHandler {
     create: (req: Request, res: Response) => Promise<IResponse>;
 }
 
-export class UserRouter {
+export class StoryRouter {
     constructor(private handler: IStoryHandler) {
         this.getStory = this.getStory.bind(this);
         this.getStoryes = this.getStoryes.bind(this);
-        this.create = this.getStoryes.bind(this);
+        this.create = this.create.bind(this);
         this.delete = this.delete.bind(this);
     }
 
     public getRouter() {
         const router = Router();
         router.get('/', this.getStoryes);
-        router.post('/', userValidation, validateRequest, this.create);
-        router.delete('/', this.delete);
+        router.post('/', this.create);
+        router.get('/:id', this.getStory);
+        router.delete('/:id', this.delete);
         return router;
     }
 
@@ -46,6 +46,7 @@ export class UserRouter {
         try {
             await this.handler.create(req, res);
         } catch (error) {
+            console.log(error)
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
@@ -61,39 +62,47 @@ export class UserRouter {
 
 
 
-type SingleStory = {
+interface Question {
     id: string;
-    title: string;
-    content: string;
-    created_at: string;
-    questions:
-    {
-        id: string;
-        question: string;
-        answer: string;
-    }[];
-
+    text: string;
+    options: string[];
+    correctAnswer: number;
 }
 
 
 type Story = {
     id: string;
+    userId: string;
+    interests: string[];  // typo düzeltildi: insterests -> interests
+    level: string;
+    difficulty: string;
+    language: string;
+    length: number;
     title: string;
     content: string;
-    created_at: string;
-    questions:
-    {
-        id: string;
-        question: string;
-        answer: string;
-    }[];
+    questions: Question[];  // Question yerine questions olmalı
+    createdAt: Date;  // createdAt, string yerine Date tipinde olmalı
 }
-
 
 type Stories = {
     id: string,
     title: string,
-    field: string,
-    result: number,
-    createdAt: string
+    interests: string[], // Burada string[] olarak düzenlendi
+    language: string,
+    level: string,
+    length: number,
+    difficulty: string,
+    result: number | null, // Burada score null olabileceği için number | null yaptık
+    createdAt: Date
 }[]
+
+
+
+type CreationStory = {
+    userId: string;
+    insterests: string[];
+    level: string;
+    difficulty: string;
+    language: string;
+    length: number;
+}
