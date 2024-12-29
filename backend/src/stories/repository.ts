@@ -8,6 +8,7 @@ interface IStoryRepository {
     getStory: (id: string) => Promise<IResult<Story>>;
     create: (data: Story) => Promise<IResult<{ id: string }>>;
     delete: (id: string) => Promise<IResult>;
+    update: (id: string, point: number) => Promise<IResult>;
 }
 export class StoryRepository implements IStoryRepository {
     private db: typeof prisma;
@@ -18,7 +19,8 @@ export class StoryRepository implements IStoryRepository {
 
     public async create(data: Story): Promise<IResult<{ id: string }>> {
         try {
-            await this.db.story.create({
+            console.log(data);
+            const story = await this.db.story.create({
                 data: {
                     userId: data.userId,
                     interest: data.interest,
@@ -38,7 +40,13 @@ export class StoryRepository implements IStoryRepository {
                     }
                 }
             });
-            return createSuccessResult({ id: data.id });
+
+            if (!story) {
+                return createErrorResult('Error creating story', 'SERVER_ERROR');
+            }
+
+
+            return createSuccessResult({ id: story.id });
         } catch (error) {
             console.error(error);
             return createErrorResult('Internal server error', 'SERVER_ERROR');
@@ -84,11 +92,7 @@ export class StoryRepository implements IStoryRepository {
                     length: true,
                     level: true,
                     difficulty: true,
-                    result: {
-                        select: {
-                            score: true
-                        }
-                    },
+                    result: true,
                     createdAt: true
                 }
             });
@@ -97,12 +101,8 @@ export class StoryRepository implements IStoryRepository {
                 return createErrorResult('Stories not found', 'NOT_FOUND');
             }
 
-            const formattedStories = stories.map(story => ({
-                ...story,
-                result: story.result ? story.result.score : null
-            }));
 
-            return createSuccessResult(formattedStories);
+            return createSuccessResult(stories);
         } catch (error) {
             console.error(error);
             return createErrorResult('Internal server error', 'SERVER_ERROR');
@@ -142,7 +142,7 @@ export class StoryRepository implements IStoryRepository {
             // 'Question' alanını 'questions' olarak yeniden adlandırıyoruz
             const formattedStory = {
                 ...story,
-                questions: story.Question ,  // 'Question' -> 'questions'
+                questions: story.Question,  // 'Question' -> 'questions'
                 createdAt: story.createdAt  // Date tipini olduğu gibi kullanıyoruz
             };
 
@@ -154,7 +154,24 @@ export class StoryRepository implements IStoryRepository {
         }
     }
 
+    public async update(id: string, point: number): Promise<IResult> {
+        try {
+            const result = await this.db.story.update({
+                where: { id },
+                data: {
+                    result: point
+                }
+            });
+            if (!result) {
+                return createErrorResult('Error updating story', 'SERVER_ERROR');
+            }
 
+            return createSuccessResult(null);
+        } catch (error) {
+            console.error(error);
+            return createErrorResult('Internal server error', 'SERVER_ERROR');
+        }
+    }
 
 }
 
@@ -169,7 +186,7 @@ interface Question {
 type Story = {
     id: string;
     userId: string;
-    interest: string; 
+    interest: string;
     level: string;
     difficulty: string;
     language: string;
@@ -184,7 +201,7 @@ type Story = {
 type Stories = {
     id: string,
     title: string,
-    interest: string, 
+    interest: string,
     language: string,
     level: string,
     length: number,

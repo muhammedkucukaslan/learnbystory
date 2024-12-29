@@ -7,6 +7,7 @@ interface IStoryService {
     getStory: (id: string) => Promise<IResult<Story>>;
     create: (data: CreationStory) => Promise<IResult<{ id: string }>>;
     delete: (id: string) => Promise<IResult>;
+    update: (id: string, point : number) => Promise<IResult>;
 }
 
 export class StoryHandler {
@@ -98,6 +99,28 @@ export class StoryHandler {
             }
 
             return handleSuccessResponse(res, { id: result.data.id }, 201);
+        } catch (error) {
+            console.error('error', error);
+            return handleErrorResponse(
+                res,
+                'SERVER_ERROR',
+                'Internal server error'
+            );
+        }
+    }
+
+    public async update(req: Request, res: Response): Promise<IResponse> {
+        try {
+            const id: string = req.params.id;
+            const result = await this.service.update(id, req.body.result);
+            if (!result.success) {
+                return handleErrorResponse(
+                    res,
+                    result.ERR_CODE,
+                    result.message
+                );
+            }
+            return handleSuccessResponse(res, null, 204);
         } catch (error) {
             console.error('error', error);
             return handleErrorResponse(
