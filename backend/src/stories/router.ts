@@ -7,6 +7,7 @@ interface IStoryHandler {
     getStory: (req: Request, res: Response) => Promise<IResponse<any>>;
     delete: (req: Request, res: Response) => Promise<IResponse>;
     create: (req: Request, res: Response) => Promise<IResponse>;
+    update: (req: Request, res: Response) => Promise<IResponse>;
 }
 
 export class StoryRouter {
@@ -23,6 +24,7 @@ export class StoryRouter {
         router.post('/', this.create);
         router.get('/:id', this.getStory);
         router.delete('/:id', this.delete);
+        router.put('/:id', this.update);
         return router;
     }
 
@@ -54,6 +56,14 @@ export class StoryRouter {
     private async delete(req: Request, res: Response) {
         try {
             await this.handler.delete(req, res);
+        } catch (error) {
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+
+    private async update(req: Request, res: Response) {
+        try {
+            await this.handler.update(req, res);
         } catch (error) {
             res.status(500).json({ error: 'Internal Server Error' });
         }

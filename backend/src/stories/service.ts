@@ -1,9 +1,7 @@
+import { Result } from 'express-validator';
 import { IResult } from '../types/global';
 import { createSuccessResult, createErrorResult } from '../utils/functions';
-import { giveTokenSize, generatePrompt, askGPT } from './utils/functions';
-
-
-
+import { generatePrompt, askGPT } from './utils/functions';
 
 
 interface IStoryRepository {
@@ -11,6 +9,7 @@ interface IStoryRepository {
     getStory: (id: string) => Promise<IResult<Story>>;
     create: (data: CreationStory) => Promise<IResult<{ id: string }>>;
     delete: (id: string) => Promise<IResult>;
+    update: (id: string, point: number) => Promise<IResult>;
 }
 
 export class StoryService {
@@ -82,6 +81,18 @@ export class StoryService {
     public async delete(id: string): Promise<IResult<null>> {
         try {
             const result = await this.repository.delete(id);
+            if (!result.success) {
+                return createErrorResult(result.message, result.ERR_CODE);
+            }
+            return createSuccessResult(null);
+        } catch (error) {
+            return createErrorResult('Internal server error', 'SERVER_ERROR');
+        }
+    }
+
+    public async update(id: string, point: number): Promise<IResult<null>> {
+        try {
+            const result = await this.repository.update(id, point);
             if (!result.success) {
                 return createErrorResult(result.message, result.ERR_CODE);
             }

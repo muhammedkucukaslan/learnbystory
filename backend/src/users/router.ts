@@ -19,7 +19,7 @@ export class UserRouter {
     public getRouter() {
         const router = Router();
         router.get('/', this.getUser);
-        router.put('/', userValidation, validateRequest, this.update);
+        router.put('/', this.update);
         router.delete('/', this.delete);
         return router;
     }
