@@ -113,7 +113,8 @@ export class StoryHandler {
     public async update(req: Request, res: Response): Promise<IResponse> {
         try {
             const id: string = req.params.id;
-            const result = await this.service.update(id, req.body.result);
+            const {result : point } = req.body;
+            const result = await this.service.update(id, point);
             if (!result.success) {
                 return handleErrorResponse(
                     res,

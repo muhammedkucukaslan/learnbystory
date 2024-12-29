@@ -16,6 +16,7 @@ export class StoryRouter {
         this.getStoryes = this.getStoryes.bind(this);
         this.create = this.create.bind(this);
         this.delete = this.delete.bind(this);
+        this.update = this.update.bind(this);
     }
 
     public getRouter() {
@@ -63,8 +64,10 @@ export class StoryRouter {
 
     private async update(req: Request, res: Response) {
         try {
+            console.log('update')
             await this.handler.update(req, res);
         } catch (error) {
+            console.log(error)
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
