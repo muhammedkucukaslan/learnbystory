@@ -6,8 +6,8 @@ export const users = {
     return response.data;
   },
 
-  updateUser: async (id: string, data: any) => {
-    const response = await apiClient.put(`/users/${id}`, data);
+  updateUser: async (data: any) => {
+    const response = await apiClient.put(`/users`, data);
     return response.data;
   },
 };

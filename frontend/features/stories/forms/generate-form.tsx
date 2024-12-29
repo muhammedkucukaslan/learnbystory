@@ -49,6 +49,8 @@ export default function GenerateForm() {
     return <div className="text-destructive">Failed to load user data</div>;
   }
 
+  console.log(user);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
