@@ -11,20 +11,26 @@ dotenv.config();
 
 const app = express()
 
+const corsOptions = {
+    origin: process.env.CLIENT_URL, // Client URL'ini direkt olarak belirtin
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+};
+
+// CORS middleware'ini uygulayın
+app.use(cors(corsOptions));
+
+// OPTIONS isteklerini handle etmek için
+app.options('*', cors(corsOptions));
+
 app.use(cookieParser());
 app.use(middleware);
-app.use(cors(
-    {
-        origin: process.env.CLIENT_URL,
-        credentials: true,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    }
-));
 app.use(express.json());
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-app.use(timeout('20s'));
+app.use(timeout('30s'));
 app.use(
     rateLimit({
         windowMs: 60 * 1000,
