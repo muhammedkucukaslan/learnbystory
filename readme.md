@@ -71,8 +71,4 @@ The backend server will be running at `http://localhost:8000` by default.
 4. Students read the story and answer generated questions
 
 ## Demo
-
-<video width="100%" controls>
-  <source src="/public/learnbystory.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![demo](/public/main.png)
